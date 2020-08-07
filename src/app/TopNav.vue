@@ -21,6 +21,9 @@
         <b-dropdown-text>
           {{ username }}
         </b-dropdown-text>
+        <b-dropdown-text v-if="version">
+          Version: {{ version }}
+        </b-dropdown-text>
         <b-dropdown-divider/>
         <b-dropdown-item-button @click="logout">
           Log out
@@ -30,9 +33,9 @@
   </div>
 </template>
 <script lang="ts">
-import Vue from "vue";
-import { mapMutations, mapState } from 'vuex';
-import SearchForm from '@/search/SearchForm.vue';
+  import Vue from "vue";
+  import { mapMutations, mapState } from 'vuex';
+  import SearchForm from '@/search/SearchForm.vue';
 
   export default Vue.extend({
     components: {
@@ -42,7 +45,10 @@ import SearchForm from '@/search/SearchForm.vue';
       ...mapState([
         "server",
         "username",
-      ])
+      ]),
+      version() {
+        return process.env.VUE_APP_VERSION;
+      },
     },
     methods: {
       ...mapMutations([
