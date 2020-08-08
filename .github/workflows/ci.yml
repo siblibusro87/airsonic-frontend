@@ -3,8 +3,7 @@ name: CI
 on: [push, pull_request]
 
 env:
-  REGISTRY: docker.pkg.github.com
-  IMAGE: docker.pkg.github.com/tamland/airsonic-frontend/airsonic-frontend
+  IMAGE: ${{ github.repository }}
   VERSION: ${{ github.sha }}
 
 jobs:
@@ -34,7 +33,7 @@ jobs:
 
     - name: Push docker image
       run: |
-        docker login $REGISTRY -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
+        docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} -p ${{ secrets.DOCKER_HUB_PASSWORD }}
         docker push $IMAGE:$VERSION
 
   preview:
@@ -82,5 +81,5 @@ jobs:
         run: |
           docker pull $IMAGE:$VERSION
           docker tag $IMAGE:$VERSION $IMAGE:latest
-          docker login $REGISTRY -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
+          docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} -p ${{ secrets.DOCKER_HUB_PASSWORD }}
           docker push $IMAGE:latest
